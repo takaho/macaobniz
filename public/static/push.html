@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Push.js</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.8/push.min.js" integrity="sha512-eiqtDDb4GUVCSqOSOTz/s/eiU4B31GrdSb17aPAA4Lv/Cjc8o+hnDvuNkgXhSI5yHuDvYkuojMaQmrB5JB31XQ==" crossorigin="anonymous"></script>
+        <link rel="manifest" href="static/manifest.json">
+        <script>
+            Push.config({
+                serviceWorker:'./static/customServiceWorker.js',
+                fallback:function(payload) {
+                    console.log(payload);
+                }
+            })
+            var promise = Push.create("Hello Push.js", {
+                body:"How's it hangin?",
+                timeout:4000,
+                onClick:()=>{
+                    window.focus();
+                    this.close();
+                },
+                tag:'foo'
+            });
+            
+
+
+
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

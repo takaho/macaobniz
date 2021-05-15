@@ -1,0 +1,7 @@
+{
+    "name": "ServiceWorker Push",
+    "short_name": "ServiceWorker Push",
+    "start_url": "./static/RegistServiceWorker.html",
+    "display": "standalone",
+    "gcm_sender_id": "722272067144"
+  }
