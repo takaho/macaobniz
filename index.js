@@ -1,17 +1,21 @@
-const { json } = require('express');
+// const { json } = require('express');
 const express = require('express')
+const fs = require('fs');
 const path = require('path')
-const PORT = process.env.PORT || 5000
+const pug = require('pug');
+
 const TOKEN = "4423";
 const Obniz = require("obniz");
-const fs = require('fs');
 
+const preferences = JSON.parse(fs.readFileSync("preferences.json"));
 
 let voltageData = new Array();
 let running = false;
 const interval_period = 5000;
-const OBNIZ_ID = "5074-4623";
-const ACCESS_TOKEN = "cq5yoJcgI0QTZNB870Scnt0HDjCI6p9DgTB9ZeHh4liEfgcPF_2YyH1PxiPITZJH";
+const OBNIZ_ID = preferences.OBNIZ_ID;
+const ACCESS_TOKEN = preferences.ACCESS_TOKEN;
+const PORT = preferences.PORT || 5000
+
 let obniz = null;
 let time_start = 0;
 const num_replicates = 5;
@@ -229,15 +233,28 @@ function stop_monitor(req, res) {
     }
 }
 
+
+function display_ui(req, res) {
+    res.render('chart', {});
+}
+
+// application
 let app = express();
+
+// configure
+app.set('view engine', 'pug')
+
+// route
 app.use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
   .get('/', dump_data)
+  .get('/app', display_ui)
   .get('/stop', stop_monitor)
   .get('/start', start_monitor)
 //   .get('/', (req, res) => res.render('pages/index'))
   .get('/obniz', process_obniz)
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+
+// start
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 // start_monitor();
